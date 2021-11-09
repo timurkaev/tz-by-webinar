@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography } from '@material-ui/core';
+import { Card, CardContent, Checkbox, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import React from 'react';
 import { ITodo } from './interfaces';
@@ -7,6 +7,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 interface Props {
   task: ITodo;
   handleRemoveTodo(taskDelete: string | boolean): void;
+  handleToggleTodo(taskToggle: string | boolean): void;
 }
 
 const useStyles = makeStyles({
@@ -15,21 +16,32 @@ const useStyles = makeStyles({
   },
   root: {
     display: 'flex',
-    alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  content: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  checkTrue: {
+    textDecoration: 'line-through',
   },
 });
 
-const TodoItems = ({ task, handleRemoveTodo }: Props) => {
+const TodoItems = ({ task, handleRemoveTodo, handleToggleTodo }: Props) => {
   const classes = useStyles();
 
   return (
     <Card className={classes.card}>
       <CardContent className={classes.root}>
-        <Typography color="textSecondary" gutterBottom>
-          {task.taskName}
+        <Typography className={classes.content} color="textSecondary" gutterBottom>
+          <Checkbox
+            checked={task.completed}
+            onChange={handleToggleTodo.bind(null, task.taskName)}
+            inputProps={{ 'aria-label': 'primary checkbox' }}
+          />
+          <span className={task.completed ? classes.checkTrue : ''}>{task.taskName}</span>
         </Typography>
-        <Typography>
+        <Typography className={classes.content}>
           <DeleteIcon
             style={{ cursor: 'pointer' }}
             onClick={() => handleRemoveTodo(task.taskName)}

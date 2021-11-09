@@ -23,6 +23,14 @@ const TodoItemForm: React.FC = () => {
   const [task, setTask] = React.useState<string | boolean>('');
   const [details, setDetails] = React.useState<string>('');
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    if (event.target.id === 'task') {
+      setTask(event.target.value);
+    } else {
+      setDetails(event.target.value);
+    }
+  };
+
   React.useEffect(() => {
     const saved = JSON.parse(localStorage.getItem('todo') || '[]') as ITodo[];
     setTodo(saved);
@@ -32,16 +40,8 @@ const TodoItemForm: React.FC = () => {
     localStorage.setItem('todo', JSON.stringify(todo));
   }, [todo]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    if (event.target.id === 'task') {
-      setTask(event.target.value);
-    } else {
-      setDetails(event.target.value);
-    }
-  };
-
   const addTask = (): void => {
-    const newTask = { taskName: task, details: details };
+    const newTask = { taskName: task, details: details, completed: false };
     setTodo([...todo, newTask]);
     console.log(todo);
     setTask('');
@@ -52,6 +52,17 @@ const TodoItemForm: React.FC = () => {
     setTodo(
       todo.filter((task) => {
         return task.taskName != taskDelete;
+      }),
+    );
+  };
+
+  const handleToggleTodo = (taskToggle: string): void => {
+    setTodo(prev => 
+      prev.map((task) => {
+        if (task.taskName === taskToggle) {
+          task.completed = !task.completed;
+        }
+        return task;
       }),
     );
   };
@@ -80,7 +91,7 @@ const TodoItemForm: React.FC = () => {
       </form>
       <Box>
         {todo.map((task: ITodo, key: number) => {
-          return <TodoItems handleRemoveTodo={handleRemoveTodo} task={task} key={key} />;
+          return <TodoItems handleToggleTodo={handleToggleTodo} handleRemoveTodo={handleRemoveTodo} task={task} key={key} />;
         })}
       </Box>
     </>
