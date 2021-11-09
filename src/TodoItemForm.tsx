@@ -39,6 +39,12 @@ const TodoItemForm: React.FC = () => {
     setDetails('');
   };
 
+  const handleRemoveTodo = (taskDelete: string): void => {
+    setTodo(todo.filter((task) => {
+        return task.taskName != taskDelete
+    }))
+  }
+
   return (
     <>
       <form className={classes.root} noValidate autoComplete="off">
@@ -63,7 +69,7 @@ const TodoItemForm: React.FC = () => {
       </form>
       <Box>
         {todo.map((task: ITodo, key: number) => {
-          return <TodoItems task={task} key={key} />;
+          return <TodoItems handleRemoveTodo={handleRemoveTodo} task={task} key={key} />;
         })}
       </Box>
     </>

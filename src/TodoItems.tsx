@@ -6,6 +6,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 interface Props {
   task: ITodo;
+  handleRemoveTodo(taskDelete: string | boolean): void;
 }
 
 const useStyles = makeStyles({
@@ -19,7 +20,7 @@ const useStyles = makeStyles({
   },
 });
 
-const TodoItems = ({ task }: Props) => {
+const TodoItems = ({ task, handleRemoveTodo }: Props) => {
   const classes = useStyles();
 
   return (
@@ -29,7 +30,11 @@ const TodoItems = ({ task }: Props) => {
           {task.taskName}
         </Typography>
         <Typography>
-          <DeleteIcon color="secondary" />
+          <DeleteIcon
+            style={{ cursor: 'pointer' }}
+            onClick={() => handleRemoveTodo(task.taskName)}
+            color="secondary"
+          />
         </Typography>
       </CardContent>
       <CardContent>{task.details}</CardContent>
