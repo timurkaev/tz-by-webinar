@@ -23,6 +23,15 @@ const TodoItemForm: React.FC = () => {
   const [task, setTask] = React.useState<string | boolean>('');
   const [details, setDetails] = React.useState<string>('');
 
+  React.useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem('todo') || '[]') as ITodo[];
+    setTodo(saved);
+  }, []);
+
+  React.useEffect(() => {
+    localStorage.setItem('todo', JSON.stringify(todo));
+  }, [todo]);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.id === 'task') {
       setTask(event.target.value);
@@ -40,10 +49,12 @@ const TodoItemForm: React.FC = () => {
   };
 
   const handleRemoveTodo = (taskDelete: string): void => {
-    setTodo(todo.filter((task) => {
-        return task.taskName != taskDelete
-    }))
-  }
+    setTodo(
+      todo.filter((task) => {
+        return task.taskName != taskDelete;
+      }),
+    );
+  };
 
   return (
     <>
